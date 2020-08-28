@@ -80,4 +80,19 @@ public class ZippoTest {
                 .body("places", hasSize(1))
         ;
     }
+
+    @Test
+    public void chainingTest2() {
+        given()
+                .when()
+                .get("http://api.zippopotam.us/us/07652")
+                .then()
+                .log().body()
+                .statusCode(200) // assertion checks
+                .contentType(ContentType.JSON) // assertion checks
+                .body("places", hasSize(1))
+                .body("places[0].state", equalTo("New Jersey"))
+                .body("places[0].'place name'", equalTo("Paramus"))
+        ;
+    }
 }
