@@ -122,7 +122,7 @@ public class ZippoTest {
     public void usingQueryParameters() {
         //https://gorest.co.in/public-api/users?_format=json&page=3
 
-        String page = "3";
+        int page = 10;
         given()
                 .log().uri()
                 .param("_format", "json")
@@ -131,7 +131,7 @@ public class ZippoTest {
                 .get("https://gorest.co.in/public-api/users")
                 .then()
                 .log().body()
-                .body("?????", equalTo(page))
+                .body("meta.pagination.page", equalTo(page))
         ;
     }
 }
