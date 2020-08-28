@@ -47,4 +47,15 @@ public class ZippoTest {
                 .log().all() // print out everything about the response
         ;
     }
+
+    @Test
+    public void checkingResponseBody() {
+        given()
+                .when()
+                .get("http://api.zippopotam.us/us/07652")
+                .then()
+                .log().all()
+                .body("places[0].state", equalTo("New Jersey"))
+        ;
+    }
 }
