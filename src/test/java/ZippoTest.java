@@ -1,16 +1,25 @@
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 public class ZippoTest {
+
+    @BeforeClass
+    public void init(){
+        baseURI = "http://api.zippopotam.us";
+    }
+
+
     @Test
     public void getTest() {
         given()
                 // prior conditions
                 .when()
-                .get("http://api.zippopotam.us/us/90210") // action
+                .get("/us/90210") // action
                 .then()
                 .statusCode(200) // assertion
         ;
@@ -20,7 +29,7 @@ public class ZippoTest {
     public void contentTypeTest() {
         given()
                 .when()
-                .get("http://api.zippopotam.us/us/90210")
+                .get("/us/90210")
                 .then()
                 .contentType(ContentType.JSON);
     }
@@ -30,7 +39,7 @@ public class ZippoTest {
         given()
                 // prior conditions
                 .when()
-                .get("http://api.zippopotam.us/us/90210") // action
+                .get("/us/90210") // action
                 .then() // checks comes after then()
                 .statusCode(200) // assertion checks
                 .contentType(ContentType.JSON) // assertion checks
@@ -42,7 +51,7 @@ public class ZippoTest {
         given()
                 .log().all()  // print out everything about the request
                 .when()
-                .get("http://api.zippopotam.us/us/90210")
+                .get("/us/90210")
                 .then()
                 .log().all() // print out everything about the response
         ;
@@ -52,7 +61,7 @@ public class ZippoTest {
     public void checkingResponseBody() {
         given()
                 .when()
-                .get("http://api.zippopotam.us/us/07652")
+                .get("/us/07652")
                 .then()
                 .log().all()
                 .body("places[0].state", equalTo("New Jersey"))
@@ -63,7 +72,7 @@ public class ZippoTest {
     public void checkingResponseBodyWithSpaceFields() {
         given()
                 .when()
-                .get("http://api.zippopotam.us/us/07652")
+                .get("/us/07652")
                 .then()
                 .log().all()
                 .body("places[0].'place name'", equalTo("Paramus"))
@@ -74,7 +83,7 @@ public class ZippoTest {
     public void checkingSizeOfArray() {
         given()
                 .when()
-                .get("http://api.zippopotam.us/us/07652")
+                .get("/us/07652")
                 .then()
                 .log().body()
                 .body("places", hasSize(1))
@@ -85,7 +94,7 @@ public class ZippoTest {
     public void chainingTest2() {
         given()
                 .when()
-                .get("http://api.zippopotam.us/us/07652")
+                .get("/us/07652")
                 .then()
                 .log().body()
                 .statusCode(200) // assertion checks
