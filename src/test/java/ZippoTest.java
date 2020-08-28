@@ -69,4 +69,15 @@ public class ZippoTest {
                 .body("places[0].'place name'", equalTo("Paramus"))
         ;
     }
+
+    @Test
+    public void checkingSizeOfArray() {
+        given()
+                .when()
+                .get("http://api.zippopotam.us/us/07652")
+                .then()
+                .log().body()
+                .body("places", hasSize(1))
+        ;
+    }
 }
