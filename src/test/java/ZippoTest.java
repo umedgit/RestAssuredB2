@@ -1,8 +1,11 @@
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -12,6 +15,7 @@ import static org.hamcrest.Matchers.*;
 public class ZippoTest {
 
     private RequestSpecification requestSpecification;
+    private ResponseSpecification responseSpecification;
 
     @BeforeClass
     public void init() {
@@ -21,17 +25,22 @@ public class ZippoTest {
                 .setAccept(ContentType.JSON)
                 .log(LogDetail.ALL)
                 .build();
+
+        responseSpecification = new ResponseSpecBuilder().
+                expectStatusCode(200)
+                .expectContentType(ContentType.JSON)
+                .build();
     }
 
 
     @Test
     public void getTest() {
         given()
-               .spec(requestSpecification)
+                .spec(requestSpecification)
                 .when()
                 .get("/us/90210") // action
                 .then()
-                .statusCode(200) // assertion
+                .spec(responseSpecification)
         ;
     }
 
