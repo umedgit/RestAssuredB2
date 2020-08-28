@@ -104,4 +104,17 @@ public class ZippoTest {
                 .body("places[0].'place name'", equalTo("Paramus"))
         ;
     }
+
+    @Test
+    public void usingPathParameters() {
+        given()
+                .log().uri()
+                .pathParam("countryCode", "us")
+                .pathParam("zipCode", "07652")
+                .when()
+                .get("/{countryCode}/{zipCode}")
+                .then()
+                .body("places", hasSize(1))
+        ;
+    }
 }
