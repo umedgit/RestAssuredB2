@@ -11,7 +11,7 @@ public class ZippoTest {
                 .when()
                 .get("http://api.zippopotam.us/us/90210") // action
                 .then()
-                .statusCode(201) // assertion
+                .statusCode(200) // assertion
         ;
     }
 }
