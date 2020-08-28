@@ -1,5 +1,8 @@
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -8,16 +11,23 @@ import static org.hamcrest.Matchers.*;
 
 public class ZippoTest {
 
+    private RequestSpecification requestSpecification;
+
     @BeforeClass
     public void init() {
         baseURI = "http://api.zippopotam.us";
+
+        requestSpecification = new RequestSpecBuilder()
+                .setAccept(ContentType.JSON)
+                .log(LogDetail.ALL)
+                .build();
     }
 
 
     @Test
     public void getTest() {
         given()
-                // prior conditions
+               .spec(requestSpecification)
                 .when()
                 .get("/us/90210") // action
                 .then()
