@@ -24,4 +24,17 @@ public class ZippoTest {
                 .then()
                 .contentType(ContentType.JSON);
     }
+
+    @Test
+    public void chainingAssertionsTest() {
+        given()
+                // prior conditions
+                .when()
+                .get("http://api.zippopotam.us/us/90210") // action
+                .then() // checks comes after then()
+                .statusCode(200) // assertion checks
+                .contentType(ContentType.JSON) // assertion checks
+        ;
+    }
+
 }
