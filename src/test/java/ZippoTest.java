@@ -58,4 +58,15 @@ public class ZippoTest {
                 .body("places[0].state", equalTo("New Jersey"))
         ;
     }
+
+    @Test
+    public void checkingResponseBodyWithSpaceFields() {
+        given()
+                .when()
+                .get("http://api.zippopotam.us/us/07652")
+                .then()
+                .log().all()
+                .body("places[0].'place name'", equalTo("Paramus"))
+        ;
+    }
 }
