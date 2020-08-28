@@ -6,8 +6,12 @@ import static org.hamcrest.Matchers.*;
 public class ZippoTest {
     @Test
     public void getTest() {
-        given().
-                when().
-                then();
+        given()
+                // prior conditions
+                .when()
+                .get("http://api.zippopotam.us/us/90210") // action
+                .then()
+                .statusCode(201) // assertion
+        ;
     }
 }
