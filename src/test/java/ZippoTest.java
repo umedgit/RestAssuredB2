@@ -9,7 +9,7 @@ import static org.hamcrest.Matchers.*;
 public class ZippoTest {
 
     @BeforeClass
-    public void init(){
+    public void init() {
         baseURI = "http://api.zippopotam.us";
     }
 
@@ -115,6 +115,23 @@ public class ZippoTest {
                 .get("/{countryCode}/{zipCode}")
                 .then()
                 .body("places", hasSize(1))
+        ;
+    }
+
+    @Test
+    public void usingQueryParameters() {
+        //https://gorest.co.in/public-api/users?_format=json&page=3
+
+        String page = "3";
+        given()
+                .log().uri()
+                .param("_format", "json")
+                .param("page", page)
+                .when()
+                .get("https://gorest.co.in/public-api/users")
+                .then()
+                .log().body()
+                .body("?????", equalTo(page))
         ;
     }
 }
