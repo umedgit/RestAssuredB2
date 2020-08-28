@@ -37,4 +37,14 @@ public class ZippoTest {
         ;
     }
 
+    @Test
+    public void logTest() {
+        given()
+                .log().all()  // print out everything about the request
+                .when()
+                .get("http://api.zippopotam.us/us/90210")
+                .then()
+                .log().all() // print out everything about the response
+        ;
+    }
 }
