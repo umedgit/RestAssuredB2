@@ -199,6 +199,7 @@ public class ZippoTest {
                 .when()
                 .get("/{countryCode}/{zipCode}")
                 .then()
+                .log().body()
                 .body("places", not(empty()))
         ;
     }
