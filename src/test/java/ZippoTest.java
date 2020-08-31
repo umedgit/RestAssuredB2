@@ -6,8 +6,11 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
@@ -155,5 +158,35 @@ public class ZippoTest {
                 .log().body()
                 .body("meta.pagination.page", equalTo(page))
         ;
+    }
+
+    @Test
+    public void testingArrays() {
+        given()
+                .log().uri()
+                .pathParam("countryCode", "tr")
+                .pathParam("zipCode", "34840")
+                .when()
+                .get("/{countryCode}/{zipCode}")
+                .then()
+                .body("places", hasSize(2))
+                .body("places.'place name'", hasItem("Altintepe Mah."))
+        ;
+    }
+
+    @Test
+    public void extactingArrays() {
+        List<String> listOfPlaces = given()
+                .log().uri()
+                .pathParam("countryCode", "tr")
+                .pathParam("zipCode", "34840")
+                .when()
+                .get("/{countryCode}/{zipCode}")
+                .then()
+                .extract().path("places.'place name'")
+        ;
+
+        System.out.println(listOfPlaces);
+        Assert.assertTrue(listOfPlaces.contains("Altintepe Mah."));
     }
 }
