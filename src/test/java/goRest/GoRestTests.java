@@ -12,9 +12,9 @@ import static org.hamcrest.Matchers.*;
 
 public class GoRestTests {
 
-    private String userId;
+    private int userId;
 
-    @Test
+    @Test(enabled = false)
     public void extractingListOfUsers() {
         List<User> userList = given()
                 .when()
@@ -27,7 +27,7 @@ public class GoRestTests {
         }
     }
 
-    @Test
+    @Test(enabled = false)
     public void extractingListOfUsersAsArray() {
         User[] userList = given()
                 .when()
@@ -40,7 +40,7 @@ public class GoRestTests {
         }
     }
 
-    @Test
+    @Test(enabled = false)
     public void extractingOneUser() {
         User user = given()
                 .when()
@@ -63,7 +63,7 @@ public class GoRestTests {
                 .then()
                 .statusCode(200)
                 .body("code", equalTo(201))
-                .extract().response().jsonPath().getString("data.id");
+                .extract().response().jsonPath().getInt("data.id");
 
         System.out.println(userId);
     }
@@ -72,11 +72,17 @@ public class GoRestTests {
     public void getUserById() {
         // use userId as path variable
         System.out.println(userId);
-
+        given()
+                .when()
+                .get("https://gorest.co.in/public-api/users/" + userId)
+                .then()
+                .statusCode(200)
+                .body("code", equalTo(200))
+                .body("data.id", equalTo(userId))
+        ;
     }
 
-    private String randomEmail()
-    {
+    private String randomEmail() {
         return RandomStringUtils.randomAlphabetic(8) + "@gmail.com";
     }
 
