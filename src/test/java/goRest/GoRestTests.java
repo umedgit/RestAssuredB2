@@ -18,8 +18,19 @@ public class GoRestTests {
                 .then()
                 .extract().response().jsonPath().getList("data", User.class);
 
-        for(User user : userList) {
+        for (User user : userList) {
             System.out.println(user);
         }
+    }
+
+    @Test
+    public void extractingOneUser() {
+        User user = given()
+                .when()
+                .get("https://gorest.co.in/public-api/users")
+                .then()
+                .extract().response().jsonPath().getObject("data[2]", User.class);
+
+        System.out.println(user);
     }
 }
