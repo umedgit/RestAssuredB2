@@ -22,6 +22,18 @@ public class GoRestTests {
             System.out.println(user);
         }
     }
+    @Test
+    public void extractingListOfUsersAsArray() {
+        User[] userList = given()
+                .when()
+                .get("https://gorest.co.in/public-api/users")
+                .then()
+                .extract().response().jsonPath().getObject("data", User[].class);
+
+        for (User user : userList) {
+            System.out.println(user);
+        }
+    }
 
     @Test
     public void extractingOneUser() {
