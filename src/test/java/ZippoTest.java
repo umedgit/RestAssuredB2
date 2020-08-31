@@ -29,6 +29,9 @@ public class ZippoTest {
         responseSpecification = new ResponseSpecBuilder().
                 expectStatusCode(200)
                 .expectContentType(ContentType.JSON)
+                .expectContentType(ContentType.JSON)
+                .expectContentType(ContentType.JSON)
+                .expectContentType(ContentType.JSON)
                 .build();
     }
 
@@ -47,6 +50,7 @@ public class ZippoTest {
     @Test
     public void contentTypeTest() {
         given()
+                .spec(requestSpecification)
                 .when()
                 .get("/us/90210")
                 .then()
@@ -60,8 +64,7 @@ public class ZippoTest {
                 .when()
                 .get("/us/90210") // action
                 .then() // checks comes after then()
-                .statusCode(200) // assertion checks
-                .contentType(ContentType.JSON) // assertion checks
+                .spec(responseSpecification)
         ;
     }
 
