@@ -55,7 +55,7 @@ public class GoRestTests {
                 // specify Authorization header, body, Content-Type header
                 .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
                 .contentType(ContentType.JSON)
-                .body("{\"email\":\""+randomestring()+"@gmail.com"+"\", \"name\": \"Techno\", \"gender\":\"Male\", \"status\": \"Active\"}")
+                .body("{\"email\":\""+ randomEmail()+"\", \"name\": \"Techno\", \"gender\":\"Male\", \"status\": \"Active\"}")
                 .when()
                 .post("https://gorest.co.in/public-api/users")
                 .then()
@@ -65,10 +65,9 @@ public class GoRestTests {
 
     }
 
-    private String randomestring()
+    private String randomEmail()
     {
-        String generatedstring= RandomStringUtils.randomAlphabetic(8);
-        return(generatedstring);
+        return RandomStringUtils.randomAlphabetic(8) + "@gmail.com";
     }
 
 }
