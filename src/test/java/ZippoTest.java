@@ -9,6 +9,7 @@ import io.restassured.specification.ResponseSpecification;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import pojo.Location;
 
 import java.util.List;
 
@@ -202,5 +203,21 @@ public class ZippoTest {
                 .log().body()
                 .body("places", not(empty()))
         ;
+    }
+
+    @Test
+    public void extractingPojo() {
+        Location location = given()
+                .log().uri()
+                .pathParam("countryCode", "tr")
+                .pathParam("zipCode", "34840")
+                .when()
+                .get("/{countryCode}/{zipCode}")
+                .then()
+                .log().body()
+                .extract().as(Location.class);
+
+        System.out.println(location);
+        System.out.println(location.getPostCode());
     }
 }
