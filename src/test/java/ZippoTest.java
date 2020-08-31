@@ -175,7 +175,7 @@ public class ZippoTest {
     }
 
     @Test
-    public void extactingArrays() {
+    public void extractingArrays() {
         List<String> listOfPlaces = given()
                 .log().uri()
                 .pathParam("countryCode", "tr")
@@ -188,5 +188,18 @@ public class ZippoTest {
 
         System.out.println(listOfPlaces);
         Assert.assertTrue(listOfPlaces.contains("Altintepe Mah."));
+    }
+
+    @Test
+    public void testingArraysNotEmpty() {
+        given()
+                .log().uri()
+                .pathParam("countryCode", "tr")
+                .pathParam("zipCode", "34840")
+                .when()
+                .get("/{countryCode}/{zipCode}")
+                .then()
+                .body("places", not(empty()))
+        ;
     }
 }
