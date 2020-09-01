@@ -1,12 +1,18 @@
 package goRest;
 
 import goRest.pojo.User;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
@@ -14,10 +20,17 @@ import static org.hamcrest.Matchers.*;
 public class GoRestUserTests {
 
     private Integer userId;
+    private String token;
+    private RequestSpecification requestSpec;
 
     @BeforeClass
     public void init() {
         baseURI = "https://gorest.co.in/public-api/users/";
+        token = "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47";
+        requestSpec = new RequestSpecBuilder()
+                .addHeader("Authorization", token)
+                .setContentType(ContentType.JSON)
+                .build();
     }
 
     @Test()
@@ -26,6 +39,7 @@ public class GoRestUserTests {
                 .when()
                 .get()
                 .then()
+                .spec(getResponseSpecForStatus(200))
                 .extract().response().jsonPath().getList("data", User.class);
 
         for (User user : userList) {
@@ -39,6 +53,7 @@ public class GoRestUserTests {
                 .when()
                 .get()
                 .then()
+                .spec(getResponseSpecForStatus(200))
                 .extract().response().jsonPath().getObject("data", User[].class);
 
         for (User user : userList) {
@@ -52,6 +67,7 @@ public class GoRestUserTests {
                 .when()
                 .get()
                 .then()
+                .spec(getResponseSpecForStatus(200))
                 .extract().response().jsonPath().getObject("data[2]", User.class);
 
         System.out.println(user);
@@ -59,16 +75,20 @@ public class GoRestUserTests {
 
     @Test
     public void creatingUser() {
+        User user = new User();
+        user.setEmail(randomEmail());
+        user.setName("Techno");
+        user.setGender("Male");
+        user.setStatus("Active");
+
         userId = given()
                 // specify Authorization header, body, Content-Type header
-                .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
-                .contentType(ContentType.JSON)
-                .body("{\"email\":\"" + randomEmail() + "\", \"name\": \"Techno\", \"gender\":\"Male\", \"status\": \"Active\"}")
+                .spec(requestSpec)
+                .body(user)
                 .when()
                 .post()
                 .then()
-                .statusCode(200)
-                .body("code", equalTo(201))
+                .spec(getResponseSpecForStatus(201))
                 .extract().response().jsonPath().getInt("data.id");
     }
 
@@ -78,8 +98,7 @@ public class GoRestUserTests {
                 .when()
                 .get(userId.toString())
                 .then()
-                .statusCode(200)
-                .body("code", equalTo(200))
+                .spec(getResponseSpecForStatus(200))
                 .body("data.id", equalTo(userId))
         ;
     }
@@ -87,16 +106,18 @@ public class GoRestUserTests {
     @Test(dependsOnMethods = "creatingUser")
     public void updateUserById() {
         String updateString = "Techno Study";
+
+        Map<String, String> body = new HashMap<>();
+        body.put("name", updateString);
+
         given()
                 // specify Authorization header, body, Content-Type header
-                .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
-                .contentType(ContentType.JSON)
-                .body("{\"name\": \"" + updateString + "\"}")
+                .spec(requestSpec)
+                .body(body)
                 .when()
                 .put(userId.toString())
                 .then()
-                .statusCode(200)
-                .body("code", equalTo(200))
+                .spec(getResponseSpecForStatus(200))
                 .body("data.name", equalTo(updateString))
         ;
     }
@@ -105,12 +126,11 @@ public class GoRestUserTests {
     public void deleteUserById() {
         given()
                 // specify Authorization header, body, Content-Type header
-                .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
+                .spec(requestSpec)
                 .when()
                 .delete(userId.toString())
                 .then()
-                .statusCode(200)
-                .body("code", equalTo(204))
+                .spec(getResponseSpecForStatus(204))
         ;
     }
 
@@ -120,8 +140,7 @@ public class GoRestUserTests {
                 .when()
                 .get(userId.toString())
                 .then()
-                .statusCode(200)
-                .body("code", equalTo(404))
+                .spec(getResponseSpecForStatus(404))
         ;
     }
 
@@ -129,4 +148,10 @@ public class GoRestUserTests {
         return RandomStringUtils.randomAlphabetic(8) + "@gmail.com";
     }
 
+    private ResponseSpecification getResponseSpecForStatus(Integer status) {
+        return new ResponseSpecBuilder()
+                .expectStatusCode(200)
+                .expectBody("code", equalTo(status))
+                .build();
+    }
 }
