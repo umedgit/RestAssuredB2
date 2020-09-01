@@ -67,7 +67,7 @@ public class CountryTest {
         body.setName(randomName);
         body.setCode(RandomStringUtils.randomAlphabetic(4));
 
-        String errorMessage = given()
+        given()
                 .cookies(cookies)
                 .body(body)
                 .contentType(ContentType.JSON)
@@ -75,9 +75,7 @@ public class CountryTest {
                 .post("/school-service/api/countries")
                 .then()
                 .statusCode(400)
-                .extract().jsonPath().getString("message");
-
-//        Assert.assertTrue(errorMessage.contains(randomName));
-        Assert.assertEquals(errorMessage, "The Country with Name \""+randomName+"\" already exists.");
+                .body("message", equalTo("The Country with Name \"" +
+                        randomName + "\" already exists."));
     }
 }
