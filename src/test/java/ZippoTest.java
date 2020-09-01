@@ -215,7 +215,7 @@ public class ZippoTest {
                 .get("/{countryCode}/{zipCode}")
                 .then()
                 .log().body()
-                .extract().as(Location.class);
+                .extract().jsonPath().getObject("$", Location.class);
 
         System.out.println(location);
         System.out.println(location.getPostCode());
