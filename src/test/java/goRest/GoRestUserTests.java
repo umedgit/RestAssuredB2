@@ -3,6 +3,7 @@ package goRest;
 import goRest.pojo.User;
 import io.restassured.http.ContentType;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -12,13 +13,18 @@ import static org.hamcrest.Matchers.*;
 
 public class GoRestUserTests {
 
-    private int userId;
+    private Integer userId;
 
-    @Test(enabled = false)
+    @BeforeClass
+    public void init() {
+        baseURI = "https://gorest.co.in/public-api/users/";
+    }
+
+    @Test()
     public void extractingListOfUsers() {
         List<User> userList = given()
                 .when()
-                .get("https://gorest.co.in/public-api/users")
+                .get()
                 .then()
                 .extract().response().jsonPath().getList("data", User.class);
 
@@ -27,11 +33,11 @@ public class GoRestUserTests {
         }
     }
 
-    @Test(enabled = false)
+    @Test()
     public void extractingListOfUsersAsArray() {
         User[] userList = given()
                 .when()
-                .get("https://gorest.co.in/public-api/users")
+                .get()
                 .then()
                 .extract().response().jsonPath().getObject("data", User[].class);
 
@@ -40,11 +46,11 @@ public class GoRestUserTests {
         }
     }
 
-    @Test(enabled = false)
+    @Test()
     public void extractingOneUser() {
         User user = given()
                 .when()
-                .get("https://gorest.co.in/public-api/users")
+                .get()
                 .then()
                 .extract().response().jsonPath().getObject("data[2]", User.class);
 
@@ -59,7 +65,7 @@ public class GoRestUserTests {
                 .contentType(ContentType.JSON)
                 .body("{\"email\":\"" + randomEmail() + "\", \"name\": \"Techno\", \"gender\":\"Male\", \"status\": \"Active\"}")
                 .when()
-                .post("https://gorest.co.in/public-api/users")
+                .post()
                 .then()
                 .statusCode(200)
                 .body("code", equalTo(201))
@@ -70,7 +76,7 @@ public class GoRestUserTests {
     public void getUserById() {
         given()
                 .when()
-                .get("https://gorest.co.in/public-api/users/" + userId)
+                .get(userId.toString())
                 .then()
                 .statusCode(200)
                 .body("code", equalTo(200))
@@ -87,7 +93,7 @@ public class GoRestUserTests {
                 .contentType(ContentType.JSON)
                 .body("{\"name\": \"" + updateString + "\"}")
                 .when()
-                .put("https://gorest.co.in/public-api/users/" + userId)
+                .put(userId.toString())
                 .then()
                 .statusCode(200)
                 .body("code", equalTo(200))
@@ -101,7 +107,7 @@ public class GoRestUserTests {
                 // specify Authorization header, body, Content-Type header
                 .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
                 .when()
-                .delete("https://gorest.co.in/public-api/users/" + userId)
+                .delete(userId.toString())
                 .then()
                 .statusCode(200)
                 .body("code", equalTo(204))
@@ -112,7 +118,7 @@ public class GoRestUserTests {
     public void getUserByIdNegative() {
         given()
                 .when()
-                .get("https://gorest.co.in/public-api/users/" + userId)
+                .get(userId.toString())
                 .then()
                 .statusCode(200)
                 .body("code", equalTo(404))
