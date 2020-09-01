@@ -78,4 +78,24 @@ public class CountryTest {
                 .body("message", equalTo("The Country with Name \"" +
                         randomName + "\" already exists."));
     }
+
+    @Test(dependsOnMethods = "createTest")
+    public void updateTest() {
+        Country body = new Country();
+        body.setId(id);
+        body.setName(RandomStringUtils.randomAlphabetic(8));
+        body.setCode(RandomStringUtils.randomAlphabetic(4));
+
+        given()
+                .cookies(cookies)
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .put("/school-service/api/countries")
+                .then()
+                .statusCode(200)
+                .body("name", equalTo(body.getName()))
+                .body("code", equalTo(body.getCode()))
+        ;
+    }
 }
