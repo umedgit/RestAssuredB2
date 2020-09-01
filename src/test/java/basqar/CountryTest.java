@@ -62,17 +62,31 @@ public class CountryTest {
     }
 
     @Test(dependsOnMethods = "createTest")
-    public void searchTest(){
+    public void searchTest() {
         given()
                 .cookies(cookies)
                 .contentType(ContentType.JSON)
-                .body("{\"name\":\""+randomName+"\"}")
+                .body("{\"name\":\"" + randomName + "\"}")
                 .when()
                 .post("/school-service/api/countries/search")
                 .then()
-        .statusCode(200)
-        .body(not(empty()))
-        .body("name", hasItem(randomName))
+                .statusCode(200)
+                .body(not(empty()))
+                .body("name", hasItem(randomName))
+        ;
+    }
+
+    @Test
+    public void searchTestNegative() {
+        given()
+                .cookies(cookies)
+                .contentType(ContentType.JSON)
+                .body("{\"name\":\"" + RandomStringUtils.randomAlphabetic(8) + "\"}")
+                .when()
+                .post("/school-service/api/countries/search")
+                .then()
+                .statusCode(200)
+                .body(equalTo("[]"))
         ;
     }
 
