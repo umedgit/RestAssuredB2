@@ -128,4 +128,16 @@ public class CountryTest {
                 .body("message", equalTo("Country not found"))
         ;
     }
+
+    @Test(dependsOnMethods = "deleteTest")
+    public void deleteTestNegative() {
+        given()
+                .cookies(cookies)
+                .when()
+                .delete("/school-service/api/countries/" + id)
+                .then()
+                .statusCode(404)
+                .body("message", equalTo("Country not found"))
+        ;
+    }
 }
