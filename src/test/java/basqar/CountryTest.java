@@ -4,6 +4,7 @@ import basqar.model.Country;
 import io.restassured.http.ContentType;
 import io.restassured.http.Cookies;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -58,5 +59,25 @@ public class CountryTest {
 
         System.out.println(id);
         System.out.println(randomName);
+    }
+
+    @Test(dependsOnMethods = "createTest")
+    public void createTestNegative() {
+        Country body = new Country();
+        body.setName(randomName);
+        body.setCode(RandomStringUtils.randomAlphabetic(4));
+
+        String errorMessage = given()
+                .cookies(cookies)
+                .body(body)
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/school-service/api/countries")
+                .then()
+                .statusCode(400)
+                .extract().jsonPath().getString("message");
+
+//        Assert.assertTrue(errorMessage.contains(randomName));
+        Assert.assertEquals(errorMessage, "The Country with Name \""+randomName+"\" already exists.");
     }
 }
