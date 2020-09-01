@@ -95,6 +95,19 @@ public class GoRestTests {
         ;
     }
 
+    @Test(dependsOnMethods = "creatingUser")
+    public void deleteUserById() {
+        given()
+                // specify Authorization header, body, Content-Type header
+                .header("Authorization", "Bearer 55b19d86844d95532f80c9a2103e1a3af0aea11b96817e6a1861b0d6532eef47")
+                .when()
+                .delete("https://gorest.co.in/public-api/users/" + userId)
+                .then()
+                .statusCode(200)
+                .body("code", equalTo(204))
+        ;
+    }
+
     private String randomEmail() {
         return RandomStringUtils.randomAlphabetic(8) + "@gmail.com";
     }
