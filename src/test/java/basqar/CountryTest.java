@@ -98,4 +98,15 @@ public class CountryTest {
                 .body("code", equalTo(body.getCode()))
         ;
     }
+
+    @Test(dependsOnMethods = "createTest", priority = 1)
+    public void deleteTest() {
+        given()
+                .cookies(cookies)
+                .when()
+                .delete("/school-service/api/countries/" + id)
+                .then()
+                .statusCode(200)
+        ;
+    }
 }
