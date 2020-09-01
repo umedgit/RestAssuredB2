@@ -95,7 +95,7 @@ public class GoRestTests {
         ;
     }
 
-    @Test(dependsOnMethods = "creatingUser")
+    @Test(dependsOnMethods = "creatingUser", priority = 1)
     public void deleteUserById() {
         given()
                 // specify Authorization header, body, Content-Type header
