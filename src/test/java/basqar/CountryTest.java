@@ -109,4 +109,23 @@ public class CountryTest {
                 .statusCode(200)
         ;
     }
+
+    @Test(dependsOnMethods = "deleteTest")
+    public void updateTestNegative() {
+        Country body = new Country();
+        body.setId(id);
+        body.setName(RandomStringUtils.randomAlphabetic(8));
+        body.setCode(RandomStringUtils.randomAlphabetic(4));
+
+        given()
+                .cookies(cookies)
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .put("/school-service/api/countries")
+                .then()
+                .statusCode(404)
+                .body("message", equalTo("Country not found"))
+        ;
+    }
 }
