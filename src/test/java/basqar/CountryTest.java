@@ -62,6 +62,21 @@ public class CountryTest {
     }
 
     @Test(dependsOnMethods = "createTest")
+    public void searchTest(){
+        given()
+                .cookies(cookies)
+                .contentType(ContentType.JSON)
+                .body("{\"name\":\""+randomName+"\"}")
+                .when()
+                .post("/school-service/api/countries/search")
+                .then()
+        .statusCode(200)
+        .body(not(empty()))
+        .body("name", hasItem(randomName))
+        ;
+    }
+
+    @Test(dependsOnMethods = "createTest")
     public void createTestNegative() {
         Country body = new Country();
         body.setName(randomName);
