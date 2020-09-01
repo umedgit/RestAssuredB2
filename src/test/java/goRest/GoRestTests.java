@@ -108,6 +108,17 @@ public class GoRestTests {
         ;
     }
 
+    @Test(dependsOnMethods = "deleteUserById")
+    public void getUserByIdNegative() {
+        given()
+                .when()
+                .get("https://gorest.co.in/public-api/users/" + userId)
+                .then()
+                .statusCode(200)
+                .body("code", equalTo(404))
+        ;
+    }
+
     private String randomEmail() {
         return RandomStringUtils.randomAlphabetic(8) + "@gmail.com";
     }
