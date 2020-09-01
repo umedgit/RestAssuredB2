@@ -159,6 +159,20 @@ public class CountryTest {
     }
 
     @Test(dependsOnMethods = "deleteTest")
+    public void searchTestNegativeAfterDelete() {
+        given()
+                .cookies(cookies)
+                .contentType(ContentType.JSON)
+                .body("{\"name\":\"" + randomName + "\"}")
+                .when()
+                .post("/school-service/api/countries/search")
+                .then()
+                .statusCode(200)
+                .body(equalTo("[]"))
+        ;
+    }
+
+    @Test(dependsOnMethods = "deleteTest")
     public void deleteTestNegative() {
         given()
                 .cookies(cookies)
