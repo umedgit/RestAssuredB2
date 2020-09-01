@@ -10,7 +10,7 @@ import java.util.List;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
-public class GoRestTests {
+public class GoRestUserTests {
 
     private int userId;
 
