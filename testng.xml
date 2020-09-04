@@ -4,7 +4,7 @@
 <suite name="Jenkins Default">
     <test name="Main">
         <classes>
-            <class name="TaskSolutions"></class>
+            <class name="ZippoTest"></class>
         </classes>
     </test>
 </suite>
