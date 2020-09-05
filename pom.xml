@@ -60,7 +60,8 @@
                 <version>3.0.0-M1</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>testng.xml</suiteXmlFile> <!-- the file name to be run by mvn -->
+                        <!--suppress UnresolvedMavenProperty -->
+                        <suiteXmlFile>${SuiteXmlFile}</suiteXmlFile> <!-- the file name to be run by mvn -->
                     </suiteXmlFiles>
                 </configuration>
             </plugin>
