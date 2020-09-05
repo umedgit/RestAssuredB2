@@ -61,7 +61,7 @@
                 <configuration>
                     <suiteXmlFiles>
                         <!--suppress UnresolvedMavenProperty -->
-                        <suiteXmlFile>${SuiteXmlFile}</suiteXmlFile> <!-- the file name to be run by mvn -->
+                        <suiteXmlFile>${suiteXmlFile}</suiteXmlFile> <!-- the file name to be run by mvn -->
                     </suiteXmlFiles>
                 </configuration>
             </plugin>
